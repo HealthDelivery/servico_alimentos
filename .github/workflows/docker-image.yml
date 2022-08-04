@@ -15,10 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build ./src/HDL.Servicos.Alimentos/ --file src/HDL.Servicos.Alimentos/HDL.Servicos.Alimentos/Dockerfile --tag conradocabelo/hdl-servicos-alimentos:latest
+      run: docker build ./src/HDL.Servicos.Alimentos/ --file src/HDL.Servicos.Alimentos/HDL.Servicos.Alimentos/Dockerfile -t hdl-servicos-alimentos
+    
+    - name: Change Tag
+      run: docker tag hdl-servicos-alimentos conradocabelo/hdl-servicos-alimentos:latest
     
     - name: Login Docker
-      run: docker login
+      run: docker login 
     
     - name: Push the Docker imgae
       run: docker push conradocabelo/hdl-servicos-alimentos:latest            
