@@ -16,3 +16,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build ./src/HDL.Servicos.Alimentos/ --file src/HDL.Servicos.Alimentos/HDL.Servicos.Alimentos/Dockerfile --tag conradocabelo/hdl-servicos-alimentos:latest
+    
+    - name: Push the Docker imgae
+      run: docker push conradocabelo/hdl-servicos-alimentos:latest            
