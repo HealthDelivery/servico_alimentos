@@ -17,5 +17,8 @@ jobs:
     - name: Build the Docker image
       run: docker build ./src/HDL.Servicos.Alimentos/ --file src/HDL.Servicos.Alimentos/HDL.Servicos.Alimentos/Dockerfile --tag conradocabelo/hdl-servicos-alimentos:latest
     
+    - name: Login Docker
+      run: docker login
+    
     - name: Push the Docker imgae
       run: docker push conradocabelo/hdl-servicos-alimentos:latest            
