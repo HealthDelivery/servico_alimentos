@@ -1,44 +1,93 @@
 ﻿using Dapper;
 using Npgsql;
-using HDL.Servicos.Alimentos.Extensions;
 using HDL.Servicos.Alimentos.Model;
 
 namespace HDL.Servicos.Alimentos.Application.Queries
 {
     public interface IAlimentoQuerie
     {
-        List<Alimento> BuscarContendoNome(string querie);
-        Alimento BuscarPorId(int id);
+        Task<IEnumerable<Alimento>> BuscarContendoNomeAsync(string querie);
+        Task<Alimento> BuscarPorIdAsync(int id);
     }
 
     public class AlimentoQuerie : IAlimentoQuerie
     {
-        private readonly ConnectionString _connectionString;
+        private readonly string _connection;
 
-        public AlimentoQuerie(ConnectionString connectionString)
+        public AlimentoQuerie(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _connection = configuration.GetConnectionString("DefaultDatabase");
         }
 
-        public List<Alimento> BuscarContendoNome(string querie)
+        public async Task<IEnumerable<Alimento>> BuscarContendoNomeAsync(string querie)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString.DefaultDatabase))
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connection))
             {
-                var query = @"SELECT * FROM Alimento 
-                              Where Alimento.Descricao Like '%@Querie%'";
+                var query = @"SELECT 
+                                 a.id,
+                                 a.id_grupo as IdGrupo,
+                                 a.codigo as Codigo,
+                                 a.descricao as Descricao,
+                                 v.id_alimento as IdAlimento,
+                                 v.energia as Energia,
+                                 v.proteina as Proteina,
+                                 v.lipidios_totais as LipidiosTotais,
+                                 v.carboidratos as Carboidratos,
+                                 v.fibra_alimentar_total as FibraAlimentarTotal,
+                                 p.id as IdModoPreparo,
+                                 p.codigo,
+                                 p.descricao
+                              FROM alimento a
+                              JOIN valor_energetico v ON v.id_alimento = a.id
+                              JOIN tipo_preparo p ON p.id = v.id_tipo_preparo
+                              Where a.Descricao Like @Querie";
+              
+                var alimentos = await connection.QueryAsync<Alimento, ValorEnergetico, ModoPreparo, Alimento>(query, (alimento, valorenergetico, modoPreparo) =>
+                {
+                    valorenergetico.ModoPreparo = modoPreparo;
 
-                return connection.Query<Alimento>(query,  new { Querie = querie }).ToList();
+                    alimento.ValoresEnergeticos.Add(valorenergetico);
+
+                    return alimento;
+                }, new { Querie = "%" + querie + "%" }, splitOn: "IdAlimento, IdModoPreparo");
+
+                return alimentos;
             }
         }
 
-        public Alimento BuscarPorId(int id)
+        public async Task<Alimento> BuscarPorIdAsync(int id)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString.DefaultDatabase))
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connection))
             {
-                var query = @"SELECT * FROM Alimento 
-                              Where Alimento.Descricao Alimento.Id = @Id";
+                var query = @"SELECT 
+                                 a.id,
+                                 a.id_grupo as IdGrupo,
+                                 a.codigo as Codigo,
+                                 a.descricao as Descricao,
+                                 v.id_alimento as IdAlimento,
+                                 v.energia as Energia,
+                                 v.proteina as Proteina,
+                                 v.lipidios_totais as LipidiosTotais,
+                                 v.carboidratos as Carboidratos,
+                                 v.fibra_alimentar_total as FibraAlimentarTotal,
+                                 p.id as IdModoPreparo,
+                                 p.codigo,
+                                 p.descricao
+                              FROM alimento a
+                              JOIN valor_energetico v ON v.id_alimento = a.id
+                              JOIN tipo_preparo p ON p.id = v.id_tipo_preparo
+                              WHERE a.Id = @Id";
 
-                return connection.QueryFirst<Alimento>(query, new { Id = id });
+                var alimentos = await connection.QueryAsync<Alimento, ValorEnergetico, ModoPreparo, Alimento>(query, (alimento, valorenergetico, modoPreparo) =>
+                {
+                    valorenergetico.ModoPreparo = modoPreparo;
+
+                    alimento.ValoresEnergeticos.Add(valorenergetico);                    
+                    
+                    return alimento;
+                }, new { Id = id }, splitOn: "IdAlimento, IdModoPreparo");    
+
+                return alimentos.FirstOrDefault();
             }
         }
     }

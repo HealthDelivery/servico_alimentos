@@ -7,7 +7,9 @@
         public int Codigo { get; set; }
         public string Descricao { get; set; }
 
-        public ModoPreparo ModoPreparo { get; set; }
-        public ValorEnergetico ValorEnergetico { get; set; }
+        public List<ValorEnergetico> ValoresEnergeticos { get; set; }
+
+        public Alimento() => 
+            ValoresEnergeticos = new List<ValorEnergetico>();
     }
 }
