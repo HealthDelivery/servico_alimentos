@@ -10,10 +10,13 @@ on:
     - cron: '36 11 * * *'
   push:
     branches: [ "main" ]
-    # Publish semver tags as releases.
+    paths-ignore:
+      - '**.md'
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - '**.md'
 
 env:
   # Use docker.io for Docker Hub if empty
