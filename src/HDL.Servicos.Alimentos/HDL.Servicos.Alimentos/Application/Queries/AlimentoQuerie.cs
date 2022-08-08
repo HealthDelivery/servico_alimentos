@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using Npgsql;
 using HDL.Servicos.Alimentos.Model;
+using HDL.Servicos.Alimentos.Infraestructure;
+using System.Data;
 
 namespace HDL.Servicos.Alimentos.Application.Queries
 {
@@ -11,17 +13,15 @@ namespace HDL.Servicos.Alimentos.Application.Queries
     }
 
     public class AlimentoQuerie : IAlimentoQuerie
-    {
-        private readonly string _connection;
+    {        
+        private readonly IConnectionFactory _connectionFactory;
 
-        public AlimentoQuerie(IConfiguration configuration)
-        {
-            _connection = configuration.GetConnectionString("DefaultDatabase");
-        }
+        public AlimentoQuerie(IConnectionFactory connectionFactory) => 
+            _connectionFactory = connectionFactory;
 
         public async Task<IEnumerable<Alimento>> BuscarContendoNomeAsync(string querie)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connection))
+            using (IDbConnection connection = _connectionFactory.CreateConnection())
             {
                 var query = @"SELECT 
                                  a.id,
@@ -57,7 +57,7 @@ namespace HDL.Servicos.Alimentos.Application.Queries
 
         public async Task<Alimento> BuscarPorIdAsync(int id)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connection))
+            using (IDbConnection connection = _connectionFactory.CreateConnection())
             {
                 var query = @"SELECT 
                                  a.id,

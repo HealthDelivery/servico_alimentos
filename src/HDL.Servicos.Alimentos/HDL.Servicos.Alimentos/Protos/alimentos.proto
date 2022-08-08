@@ -18,19 +18,19 @@ message ConsultaPorQueryRequest {
 }
 
 message ValorEnergetico {
-	float energia = 1;
-	float proteina = 2;
-	float lipidiostotais = 3;
-	float carboidratos = 4;
-	float fibraalimentar = 5;
-
-	ModoPreparo ModoPreparo = 6;
+  float energia = 1;
+  float proteina = 2;
+  float lipidiostotais = 3;
+  float carboidratos = 4;
+  float fibraalimentar = 5;
+  
+  ModoPreparo ModoPreparo = 6;
 }
 
 message ModoPreparo {
-	int32 id = 1;
-	string codigo = 2;
-	string descricao = 3;
+  int32 id = 1;
+  string codigo = 2;
+  string descricao = 3;
 }
 
 message AlimentoResponse {

@@ -1,11 +1,15 @@
 using HDL.Servicos.Alimentos.Application.Queries;
+using HDL.Servicos.Alimentos.Infraestructure;
 using HDL.Servicos.Alimentos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
 
+builder.Services.AddScoped<IConnectionFactory, ConnectionFactoryAlimentos>();
 builder.Services.AddScoped<IAlimentoQuerie, AlimentoQuerie>();
+
+builder.Configuration.AddEnvironmentVariables();
 
 var app = builder.Build();
 
