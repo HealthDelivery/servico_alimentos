@@ -1,9 +1,11 @@
 ﻿using Grpc.Core;
 using HDL.Servicos.Alimentos.Application.Queries;
 using HDL.Servicos.Alimentos.Protos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HDL.Servicos.Alimentos.Services
 {
+    [Authorize]
     public class AlimentosService : Protos.Alimentos.AlimentosBase
     {
         private readonly ILogger<AlimentosService> _logger;

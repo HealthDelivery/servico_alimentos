@@ -15,8 +15,15 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.47.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
     <PackageReference Include="Npgsql" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HDL.Core.Auth">
+      <HintPath>..\..\..\..\pacote_auth\HDL.Core.Auth\HDL.Core.Auth\bin\Debug\net6.0\HDL.Core.Auth.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
