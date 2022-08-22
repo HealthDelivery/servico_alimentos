@@ -47,5 +47,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"HealthDelivery_servico_alimentos" /o:"healthdelivery" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          <insert_your_build_command>
+          dotnet restore "HDL.Servicos.Alimentos/HDL.Servicos.Alimentos.csproj"
+          dotnet build "HDL.Servicos.Alimentos.csproj" 
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
