@@ -9,5 +9,7 @@
         public float FibraAlimentar { get; set; }
 
         public ModoPreparo ModoPreparo { get; set; }
+
+        public ValorEnergetico() => ModoPreparo = new();
     }
 }

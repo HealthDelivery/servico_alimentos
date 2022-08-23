@@ -87,7 +87,7 @@ namespace HDL.Servicos.Alimentos.Application.Queries
                     return alimento;
                 }, new { Id = id }, splitOn: "IdAlimento, IdModoPreparo");    
 
-                return alimentos.FirstOrDefault();
+                return alimentos.FirstOrDefault() ?? new();
             }
         }
     }

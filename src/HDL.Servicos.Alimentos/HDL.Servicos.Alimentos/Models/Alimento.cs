@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public int IdGrupo { get; set; }
         public int Codigo { get; set; }
-        public string Descricao { get; set; }
+        public string? Descricao { get; set; }
 
         public List<ValorEnergetico> ValoresEnergeticos { get; set; }
 
